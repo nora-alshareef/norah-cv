@@ -253,9 +253,20 @@
   .project-body li::before{content:"✦";position:absolute;left:0;color:var(--pink);font-size:11px;top:3px;}
   .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
   .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);background:var(--glass-strong);border:1px solid var(--border);padding:5px 12px;border-radius:20px;}
+  .proj-columns{display:flex;gap:28px;align-items:flex-start;}
+  .proj-columns.reverse{flex-direction:row-reverse;}
+  .proj-text{flex:1 1 0;min-width:0;}
+  .proj-media{flex:0 0 300px;display:flex;flex-direction:column;gap:14px;}
+  .proj-media .media-slot{margin-top:0;padding-top:0;border-top:none;}
+  .proj-media .twitter-tweet{max-width:260px !important;}
+  @media(max-width:820px){
+    .proj-columns,.proj-columns.reverse{flex-direction:column;}
+    .proj-media{flex:1 1 auto;width:100%;}
+  }
+
   .media-slot{margin-top:20px;padding-top:20px;border-top:1px solid var(--border);}
   .media-slot-label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-faint);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.06em;}
-  .twitter-tweet{margin:0 auto !important;max-width:340px !important;}
+  .twitter-tweet{margin:0 auto !important;max-width:280px !important;}
   .media-slot .twitter-tweet-wrap{display:flex;justify-content:center;}
   .watch-card{
     display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:16px;
@@ -498,17 +509,23 @@
         <a class="project-link" href="https://ibram.nic.gov.sa" target="_blank">ibram.nic.gov.sa →</a>
       </div>
       <div class="project-body">
-        <p>Saudi Arabia's national platform for legally-binding digital signatures. I built the signing engine myself, then hired and interviewed the team that scaled it. Business case, cryptography, infrastructure, and network — all mine to design.</p>
-        <ul>
-          <li>Built the core RSA/ECDSA signing engine, integrated directly against Saudi's PKI Signing CA — no third-party signing vendor.</li>
-          <li>Negotiated and commissioned the HSM contracts myself, then set up the HSMs and network path to them.</li>
-          <li>Now processes 5,000+ signing transactions a day and has signed 300,000+ documents in production.</li>
-          <li>Later extended the platform with a dedicated document-signing CA (TCA) — architected and set up personally.</li>
-        </ul>
-        <div class="tags"><span class="tag">.NET Core</span><span class="tag">RSA / ECDSA</span><span class="tag">HSM</span><span class="tag">PKI</span></div>
-        <div class="media-slot">
-          <div class="media-slot-label mono">// as it happened</div>
-          <blockquote class="twitter-tweet" data-theme="dark"><a href="https://x.com/SDAIA_SA/status/2086792362030661809"></a></blockquote>
+        <div class="proj-columns">
+          <div class="proj-text">
+            <p>Saudi Arabia's national platform for legally-binding digital signatures. I built the signing engine myself, then hired and interviewed the team that scaled it. Business case, cryptography, infrastructure, and network — all mine to design.</p>
+            <ul>
+              <li>Built the core RSA/ECDSA signing engine, integrated directly against Saudi's PKI Signing CA — no third-party signing vendor.</li>
+              <li>Negotiated and commissioned the HSM contracts myself, then set up the HSMs and network path to them.</li>
+              <li>Now processes 5,000+ signing transactions a day and has signed 300,000+ documents in production.</li>
+              <li>Later extended the platform with a dedicated document-signing CA (TCA) — architected and set up personally.</li>
+            </ul>
+            <div class="tags"><span class="tag">.NET Core</span><span class="tag">RSA / ECDSA</span><span class="tag">HSM</span><span class="tag">PKI</span></div>
+          </div>
+          <div class="proj-media">
+            <div class="media-slot">
+              <div class="media-slot-label mono">// as it happened</div>
+              <blockquote class="twitter-tweet" data-theme="dark" data-cards="hidden" data-conversation="none" data-width="260"><a href="https://x.com/SDAIA_SA/status/2086792362030661809"></a></blockquote>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -523,17 +540,23 @@
         <a class="project-link" href="https://www.iam.gov.sa/authservice/userauthservice?lang=ar" target="_blank">iam.gov.sa →</a>
       </div>
       <div class="project-body">
-        <p>The authenticator app every citizen and resident in Saudi Arabia uses to log into government and private services. I joined at the ground floor as one of the founding team, first mapping the business requirements, then redesigning the network architecture as system architect.</p>
-        <ul>
-          <li>Redesigned network architecture enabling access to 6,000+ government and private services.</li>
-          <li>Engineered a sticky-session strategy and zero-downtime migration at tens-of-millions-of-citizens scale.</li>
-          <li>Ran early POCs across SAML, OAuth, OpenID, and OIDC to settle on the national SSO protocol stack.</li>
-          <li>Today: 23.5M+ users, 3B+ transactions.</li>
-        </ul>
-        <div class="tags"><span class="tag">SAML</span><span class="tag">OAuth2 / OIDC</span><span class="tag">Java</span><span class="tag">High Availability</span></div>
-        <div class="media-slot">
-          <div class="media-slot-label mono">// as it happened</div>
-          <blockquote class="twitter-tweet" data-theme="dark"><a href="https://x.com/SDAIA_SA/status/1783490958773952874"></a></blockquote>
+        <div class="proj-columns reverse">
+          <div class="proj-text">
+            <p>The authenticator app every citizen and resident in Saudi Arabia uses to log into government and private services. I joined at the ground floor as one of the founding team, first mapping the business requirements, then redesigning the network architecture as system architect.</p>
+            <ul>
+              <li>Redesigned network architecture enabling access to 6,000+ government and private services.</li>
+              <li>Engineered a sticky-session strategy and zero-downtime migration at tens-of-millions-of-citizens scale.</li>
+              <li>Ran early POCs across SAML, OAuth, OpenID, and OIDC to settle on the national SSO protocol stack.</li>
+              <li>Today: 23.5M+ users, 3B+ transactions.</li>
+            </ul>
+            <div class="tags"><span class="tag">SAML</span><span class="tag">OAuth2 / OIDC</span><span class="tag">Java</span><span class="tag">High Availability</span></div>
+          </div>
+          <div class="proj-media">
+            <div class="media-slot">
+              <div class="media-slot-label mono">// as it happened</div>
+              <blockquote class="twitter-tweet" data-theme="dark" data-cards="hidden" data-conversation="none" data-width="260"><a href="https://x.com/SDAIA_SA/status/1783490958773952874"></a></blockquote>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -548,27 +571,33 @@
         <a class="project-link" href="https://sdaia.gov.sa/en/Sectors/Nic/ca/Pages/default.aspx" target="_blank">SDAIA CA →</a>
       </div>
       <div class="project-body">
-        <p>Supervised the migration of Saudi Arabia's national PKI from NCDC to SDAIA's datacenter — understanding NCDC's existing infrastructure, the PKI itself, and the specific structure of the Saudi PKI hierarchy, then designing the new environment it would live in.</p>
-        <ul>
-          <li>Designed the system architecture for new datacenter zones — root room, server racks, network segmentation — and wrote the full migration plan.</li>
-          <li>Worked directly with WebTrust consultants throughout, since a mis-step could have cost the CA its browser-trust accreditation.</li>
-          <li>Designed the system architecture for Saudi's public SSL infrastructure at <a href="https://ssl.gov.sa" target="_blank" style="color:var(--violet);">ssl.gov.sa</a>.</li>
-          <li>Also built an internal certificate-management solution now issuing 5,000+ internal certificates for SDAIA's servers and firewalls.</li>
-        </ul>
-        <div class="tags"><span class="tag">X.509</span><span class="tag">Root CA</span><span class="tag">WebTrust</span><span class="tag">HSM</span></div>
-        <div class="media-slot">
-          <div class="media-slot-label mono">// presenting at the PKI event</div>
-          <blockquote class="twitter-tweet" data-theme="dark"><a href="https://x.com/SDAIA_SA/status/1733595434625520007"></a></blockquote>
-        </div>
-        <div class="media-slot">
-          <div class="media-slot-label mono">// ssl.gov.sa</div>
-          <a class="watch-card" href="https://ssl.gov.sa/assets/try1-DN8pBRns.mp4" target="_blank">
-            <div class="watch-play">▶</div>
-            <div>
-              <div class="watch-t1">Watch the SSL promo</div>
-              <div class="watch-t2">ssl.gov.sa · opens in a new tab</div>
+        <div class="proj-columns">
+          <div class="proj-text">
+            <p>Supervised the migration of Saudi Arabia's national PKI from NCDC to SDAIA's datacenter — understanding NCDC's existing infrastructure, the PKI itself, and the specific structure of the Saudi PKI hierarchy, then designing the new environment it would live in.</p>
+            <ul>
+              <li>Designed the system architecture for new datacenter zones — root room, server racks, network segmentation — and wrote the full migration plan.</li>
+              <li>Worked directly with WebTrust consultants throughout, since a mis-step could have cost the CA its browser-trust accreditation.</li>
+              <li>Designed the system architecture for Saudi's public SSL infrastructure at <a href="https://ssl.gov.sa" target="_blank" style="color:var(--violet);">ssl.gov.sa</a>.</li>
+              <li>Also built an internal certificate-management solution now issuing 5,000+ internal certificates for SDAIA's servers and firewalls.</li>
+            </ul>
+            <div class="tags"><span class="tag">X.509</span><span class="tag">Root CA</span><span class="tag">WebTrust</span><span class="tag">HSM</span></div>
+          </div>
+          <div class="proj-media">
+            <div class="media-slot">
+              <div class="media-slot-label mono">// presenting at the PKI event</div>
+              <blockquote class="twitter-tweet" data-theme="dark" data-cards="hidden" data-conversation="none" data-width="260"><a href="https://x.com/SDAIA_SA/status/1733595434625520007"></a></blockquote>
             </div>
-          </a>
+            <div class="media-slot">
+              <div class="media-slot-label mono">// ssl.gov.sa</div>
+              <a class="watch-card" href="https://ssl.gov.sa/assets/try1-DN8pBRns.mp4" target="_blank">
+                <div class="watch-play">▶</div>
+                <div>
+                  <div class="watch-t1">Watch the SSL promo</div>
+                  <div class="watch-t2">ssl.gov.sa · opens in a new tab</div>
+                </div>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -582,25 +611,27 @@
         </div>
       </div>
       <div class="project-body">
-        <p>Led backend development and hiring for the biometric verification layer of the national e-gate system — the fingerprint and face-recognition matching that decides, in real time, whether a traveller passes through.</p>
-        <ul>
-          <li>Owned architecture from POC through production deployment.</li>
-          <li>Built and hired the backend team responsible for real-time biometric matching under airport-grade latency and uptime requirements.</li>
-          <li>Integrated identity verification with real-time data flows and high-availability infrastructure for a live smart-city travel system.</li>
-        </ul>
-        <div class="tags"><span class="tag">Biometrics</span><span class="tag">Fingerprint Matching</span><span class="tag">Face Recognition</span><span class="tag">Distributed Systems</span><span class="tag">Team Hiring</span></div>
-        <div class="media-slot">
-          <div class="media-slot-label mono">// Jawazat — smart gate launch</div>
-          <blockquote class="twitter-tweet" data-theme="dark"><a href="https://x.com/DACOKSA/status/1217807618162425856"></a></blockquote>
-        </div>
-        <div class="media-slot">
-          <div class="media-slot-label mono">// smart gate, in production</div>
-          <blockquote class="twitter-tweet" data-theme="dark"><a href="https://x.com/SDAIA_SA/status/1833441355931996201"></a></blockquote>
-        </div>
-        <div class="media-slot">
-          <div class="media-slot-label mono">// Jawazat — electronic gates</div>
-          <div class="media-embed fb-wrap">
-            <iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FAljawazatKSA%2Fvideos%2Felectronic-gates-are-self-service-to-facilitate-the-departure-of-the-guests-of-a%2F2080150269592950%2F&show_text=false" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+        <div class="proj-columns reverse">
+          <div class="proj-text">
+            <p>Led backend development and hiring for the biometric verification layer of the national e-gate system — the fingerprint and face-recognition matching that decides, in real time, whether a traveller passes through.</p>
+            <ul>
+              <li>Owned architecture from POC through production deployment.</li>
+              <li>Built and hired the backend team responsible for real-time biometric matching under airport-grade latency and uptime requirements.</li>
+              <li>Integrated identity verification with real-time data flows and high-availability infrastructure for a live smart-city travel system.</li>
+            </ul>
+            <div class="tags"><span class="tag">Biometrics</span><span class="tag">Fingerprint Matching</span><span class="tag">Face Recognition</span><span class="tag">Distributed Systems</span><span class="tag">Team Hiring</span></div>
+          </div>
+          <div class="proj-media">
+            <div class="media-slot">
+              <div class="media-slot-label mono">// smart gate, in production</div>
+              <blockquote class="twitter-tweet" data-theme="dark" data-cards="hidden" data-conversation="none" data-width="260"><a href="https://x.com/SDAIA_SA/status/1833441355931996201"></a></blockquote>
+            </div>
+            <div class="media-slot">
+              <div class="media-slot-label mono">// Jawazat — electronic gates</div>
+              <div class="media-embed fb-wrap">
+                <iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FAljawazatKSA%2Fvideos%2Felectronic-gates-are-self-service-to-facilitate-the-departure-of-the-guests-of-a%2F2080150269592950%2F&show_text=false" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -635,17 +666,23 @@
         <a class="project-link" href="https://play.google.com/store/apps/details?id=sa.gov.mofa.saudivisabio" target="_blank">Play Store →</a>
       </div>
       <div class="project-body">
-        <p>Led design and development of the Ministry of Foreign Affairs enrollment service — built the backend for both in-office biometric checking at MOFA counters and the mobile version applicants use directly, alongside the Unique-ID and AFIS (Automated Fingerprint Identification System) work.</p>
-        <div class="tags"><span class="tag">Biometrics</span><span class="tag">Java</span><span class="tag">AFIS</span><span class="tag">Mobile Backend</span><span class="tag">National Scale</span></div>
-        <div class="media-slot">
-          <div class="media-slot-label mono">// Saudi Visa Bio</div>
-          <a class="watch-card" href="https://www.youtube.com/watch?v=lrKKd1mF0b4" target="_blank">
-            <div class="watch-play">▶</div>
-            <div>
-              <div class="watch-t1">Watch the app demo</div>
-              <div class="watch-t2">YouTube · opens in a new tab</div>
+        <div class="proj-columns">
+          <div class="proj-text">
+            <p>Led design and development of the Ministry of Foreign Affairs enrollment service — built the backend for both in-office biometric checking at MOFA counters and the mobile version applicants use directly, alongside the Unique-ID and AFIS (Automated Fingerprint Identification System) work.</p>
+            <div class="tags"><span class="tag">Biometrics</span><span class="tag">Java</span><span class="tag">AFIS</span><span class="tag">Mobile Backend</span><span class="tag">National Scale</span></div>
+          </div>
+          <div class="proj-media">
+            <div class="media-slot">
+              <div class="media-slot-label mono">// Saudi Visa Bio</div>
+              <a class="watch-card" href="https://www.youtube.com/watch?v=lrKKd1mF0b4" target="_blank">
+                <div class="watch-play">▶</div>
+                <div>
+                  <div class="watch-t1">Watch the app demo</div>
+                  <div class="watch-t2">YouTube · opens in a new tab</div>
+                </div>
+              </a>
             </div>
-          </a>
+          </div>
         </div>
       </div>
     </div>
