@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Norah Alshareef — System Architect, National Identity Infrastructure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #100A24;
+    --bg-2: #150E30;
+    --glass: rgba(255,255,255,0.05);
+    --glass-strong: rgba(255,255,255,0.09);
+    --border: rgba(255,255,255,0.10);
+    --text: #F4F1FF;
+    --text-dim: #B3A9D9;
+    --text-faint: #7C71A6;
+    --violet: #9B7BFF;
+    --violet-2: #B5A5F7;
+    --indigo: #5B4CC4;
+    --pink: #F472B6;
+    --teal: #34B8AA;
+    --blue: #6C8CFF;
+    --shadow: 0 20px 60px rgba(80,50,200,0.25);
+  }
+  html[data-theme="light"]{
+    --bg: #F6F3FF;
+    --bg-2: #EFE9FF;
+    --glass: rgba(255,255,255,0.65);
+    --glass-strong: rgba(255,255,255,0.85);
+    --border: rgba(91,76,196,0.14);
+    --text: #221847;
+    --text-dim: #5A4E8C;
+    --text-faint: #8B80B8;
+    --shadow: 0 20px 50px rgba(120,90,220,0.15);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Outfit',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    transition:background .4s ease, color .4s ease;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  .display{font-family:'Space Grotesk',sans-serif;}
+  a{color:inherit;text-decoration:none;}
+  ::selection{background:var(--violet);color:#fff;}
+  img{max-width:100%;display:block;}
+
+  .blob{position:fixed;border-radius:50%;filter:blur(90px);z-index:0;opacity:0.55;pointer-events:none;}
+  .blob-1{width:520px;height:520px;top:-180px;left:-160px;background:radial-gradient(circle,var(--violet),transparent 70%);animation:float1 22s ease-in-out infinite;}
+  .blob-2{width:460px;height:460px;top:120px;right:-200px;background:radial-gradient(circle,var(--pink),transparent 70%);animation:float2 26s ease-in-out infinite;}
+  .blob-3{width:420px;height:420px;bottom:-160px;left:20%;background:radial-gradient(circle,var(--blue),transparent 70%);animation:float3 20s ease-in-out infinite;}
+  .blob-4{width:380px;height:380px;top:900px;right:10%;background:radial-gradient(circle,var(--teal),transparent 70%);animation:float2 24s ease-in-out infinite;opacity:0.35;}
+  html[data-theme="light"] .blob{opacity:0.35;}
+  @keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,60px)}}
+  @keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-50px,40px)}}
+  @keyframes float3{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-40px)}}
+
+  /* CURSOR GLOW */
+  body{cursor:none;}
+  a,button,.btn,.theme-toggle,.logo-tile{cursor:none;}
+  #cursorSquare{
+    position:fixed;width:18px;height:18px;border:1.5px solid var(--violet-2);
+    pointer-events:none;z-index:9999;transform:translate(-50%,-50%) rotate(0deg);
+    transition:width .2s ease, height .2s ease, border-color .2s ease, background .2s ease;
+    mix-blend-mode:difference;
+  }
+  #cursorSquare.hover{width:34px;height:34px;background:rgba(155,123,255,0.15);}
+  @media(max-width:900px){body,a,button,.btn,.theme-toggle,.logo-tile{cursor:auto;} #cursorSquare{display:none;}}
+  #cursorGlow{
+    position:fixed;width:420px;height:420px;border-radius:50%;pointer-events:none;z-index:2;
+    background:radial-gradient(circle,rgba(155,123,255,0.16),transparent 70%);
+    transform:translate(-50%,-50%);left:50%;top:50%;
+    transition:opacity .3s ease;
+    will-change:transform;
+  }
+  @media(max-width:900px){#cursorGlow{display:none;}}
+
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px;position:relative;z-index:1;}
+
+  /* ORBIT RING — around the logo showcase */
+  .orbit-wrap{position:relative;margin:0 auto 8px;width:100%;max-width:640px;height:0;}
+  .orbit{
+    position:absolute;top:50%;left:50%;border:1px dashed var(--border);border-radius:50%;
+    transform:translate(-50%,-50%);pointer-events:none;
+  }
+  .orbit-a{width:760px;height:760px;animation:spin 60s linear infinite;}
+  .orbit-b{width:900px;height:900px;animation:spin 90s linear infinite reverse;border-color:rgba(244,114,182,0.18);}
+  @keyframes spin{from{transform:translate(-50%,-50%) rotate(0deg);}to{transform:translate(-50%,-50%) rotate(360deg);}}
+
+  /* MARQUEE */
+  .marquee-outer{
+    overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+    padding:22px 0;background:var(--glass);
+  }
+  .marquee-track{display:flex;gap:48px;width:max-content;animation:marquee 28s linear infinite;}
+  .marquee-outer:hover .marquee-track{animation-play-state:paused;}
+  @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  .m-item{
+    display:flex;align-items:center;gap:10px;
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;color:var(--text-dim);
+    opacity:0.85;
+  }
+  .m-item .dot{width:6px;height:6px;border-radius:50%;background:linear-gradient(90deg,var(--violet),var(--pink));}
+
+  .nav-pill-wrap{position:sticky;top:16px;z-index:60;display:flex;justify-content:center;padding:0 20px;}
+  .nav-pill{
+    display:flex;align-items:center;gap:28px;
+    background:var(--glass-strong);
+    border:1px solid var(--border);
+    backdrop-filter:blur(18px);
+    border-radius:100px;
+    padding:12px 22px;
+    box-shadow:var(--shadow);
+    max-width:1000px;width:100%;
+    justify-content:space-between;
+  }
+  .nav-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;background:linear-gradient(90deg,var(--violet),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .nav-links{display:flex;gap:22px;font-size:13.5px;color:var(--text-dim);align-items:center;}
+  .nav-links a:hover{color:var(--violet);}
+  @media(max-width:760px){.nav-links a:not(.theme-toggle){display:none;}}
+
+  .theme-toggle{
+    width:38px;height:38px;border-radius:50%;
+    border:1px solid var(--border);background:var(--glass);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    font-size:16px;transition:transform .2s ease;
+  }
+  .theme-toggle:hover{transform:scale(1.1) rotate(15deg);}
+
+  .hero{padding:56px 0 40px;text-align:center;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--violet);
+    letter-spacing:0.08em;text-transform:uppercase;margin-bottom:30px;
+    background:var(--glass);border:1px solid var(--border);padding:7px 16px;border-radius:100px;
+  }
+
+  .profile-block{
+    display:flex;align-items:center;justify-content:center;gap:36px;margin-bottom:36px;flex-wrap:wrap;
+  }
+  .profile-photo{
+    width:180px;height:180px;border-radius:32px;object-fit:cover;
+    border:2px solid var(--border);
+    box-shadow:0 0 0 6px rgba(155,123,255,0.08), 0 20px 50px rgba(80,50,200,0.3);
+    flex-shrink:0;
+  }
+  .profile-name{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;
+    font-size:clamp(36px,7vw,72px);line-height:0.98;letter-spacing:-0.02em;text-align:left;
+    background:linear-gradient(90deg,var(--text),var(--violet-2) 60%,var(--pink));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .profile-role{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text-dim);margin-top:10px;text-align:left;letter-spacing:0.02em;}
+  .mini-logos{display:flex;gap:10px;margin-top:16px;}
+  .mini-logo{
+    width:42px;height:42px;border-radius:10px;background:#fff;
+    display:flex;align-items:center;justify-content:center;padding:6px;
+    border:1px solid var(--border);box-shadow:0 6px 16px rgba(80,50,200,0.15);
+    transition:transform .25s cubic-bezier(.2,.9,.3,1.3);
+  }
+  .mini-logo:hover{transform:translateY(-4px) scale(1.1);}
+  .mini-logo img{width:100%;height:100%;object-fit:contain;}
+  @media(max-width:640px){.mini-logos{justify-content:center;}}
+  @media(max-width:640px){.profile-block{flex-direction:column;text-align:center;} .profile-name,.profile-role{text-align:center;}}
+
+  .mini-label{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:18px;}
+
+  .logo-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:44px;}
+  @media(max-width:900px){.logo-grid{grid-template-columns:repeat(3,1fr);}}
+  @media(max-width:520px){.logo-grid{grid-template-columns:repeat(2,1fr);}}
+  .logo-tile{
+    aspect-ratio:1/1;border-radius:26px;display:flex;align-items:center;justify-content:center;
+    position:relative;overflow:hidden;border:1px solid var(--border);cursor:pointer;
+    transition:transform .35s cubic-bezier(.2,.9,.3,1.3), box-shadow .35s ease;
+    box-shadow:0 10px 30px rgba(80,50,200,0.12);
+  }
+  .logo-tile:hover{transform:translateY(-8px) scale(1.05) rotate(-1deg);box-shadow:0 24px 50px rgba(80,50,200,0.3);}
+  .logo-tile img{width:62%;height:62%;object-fit:contain;position:relative;z-index:2;}
+  .logo-tile .tile-label{
+    position:absolute;bottom:10px;left:0;right:0;text-align:center;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.06em;
+    color:rgba(255,255,255,0.85);z-index:3;text-transform:uppercase;
+  }
+  .logo-tile.video{align-items:center;justify-content:center;flex-direction:column;}
+  .logo-tile .mark-text{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px;color:rgba(255,255,255,0.95);position:relative;z-index:2;}
+  .tile-nafath{background:linear-gradient(135deg,#2F9E96,#1E6E68);}
+  .tile-ibram{background:linear-gradient(135deg,#241849,#4A3A8C);}
+  .tile-caracal{background:linear-gradient(135deg,#2A2050,#443577);}
+  .tile-ssl{background:linear-gradient(135deg,#5B4CC4,#3A2E8C);}
+  .tile-egates{background:linear-gradient(135deg,#F472B6,#9B5DE5);}
+  .tile-mofa{background:linear-gradient(135deg,#6C8CFF,#4C3AA6);}
+
+  h1{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(32px,5.4vw,54px);
+    line-height:1.1;letter-spacing:-0.02em;max-width:760px;margin:0 auto;
+  }
+  h1 .hl{background:linear-gradient(90deg,var(--violet),var(--pink),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .hadith-ar{
+    font-family:'Amiri',serif;font-weight:700;font-size:clamp(26px,4.2vw,40px);
+    max-width:720px;margin:0 auto 14px;line-height:1.9;
+    background:linear-gradient(90deg,var(--violet-2),var(--pink));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hadith-en{font-family:'Outfit',sans-serif;font-style:italic;font-size:14.5px;color:var(--text-faint);max-width:520px;margin:0 auto;}
+  .hero-sub{margin:20px auto 0;font-size:16.5px;color:var(--text-dim);max-width:560px;}
+  .hero-cta{display:flex;gap:14px;margin-top:32px;flex-wrap:wrap;justify-content:center;}
+  .btn{font-family:'Outfit',sans-serif;font-weight:600;font-size:14px;padding:13px 24px;border-radius:100px;border:1px solid var(--border);transition:all .2s ease;}
+  .btn-primary{background:linear-gradient(90deg,var(--violet),var(--pink));color:#fff;border:none;box-shadow:0 10px 30px rgba(155,123,255,0.35);}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(155,123,255,0.45);}
+  .btn-ghost{color:var(--text-dim);background:var(--glass);}
+  .btn-ghost:hover{color:var(--text);border-color:var(--violet);}
+  .hero-meta{margin-top:26px;display:flex;flex-wrap:wrap;gap:18px;font-size:13px;color:var(--text-faint);justify-content:center;}
+  .hero-meta a:hover{color:var(--violet);}
+
+  .ledger{padding:20px 0 40px;}
+  .ledger-grid{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
+  .stat{background:var(--glass);border:1px solid var(--border);border-radius:20px;padding:18px 26px;text-align:center;backdrop-filter:blur(10px);}
+  .stat-num{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;background:linear-gradient(90deg,var(--violet),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .stat-label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--text-faint);margin-top:3px;text-transform:uppercase;letter-spacing:0.04em;}
+
+  section{padding:64px 0;}
+  .sec-head{margin-bottom:34px;text-align:left;}
+  .sec-tag{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--pink);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;}
+  .sec-title{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;}
+  .sec-desc{color:var(--text-dim);margin-top:10px;max-width:560px;font-size:14.5px;}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s cubic-bezier(.2,.7,.2,1), transform .6s cubic-bezier(.2,.7,.2,1);}
+  .reveal.show{opacity:1;transform:translateY(0);}
+
+  .project{
+    background:var(--glass);border:1px solid var(--border);border-radius:24px;padding:30px;margin-bottom:22px;
+    backdrop-filter:blur(14px);box-shadow:var(--shadow);
+  }
+  .project-head{display:flex;align-items:center;gap:18px;margin-bottom:20px;flex-wrap:wrap;}
+  .logo-badge{width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;}
+  .logo-badge img{width:70%;height:70%;object-fit:contain;}
+  .project-titles{flex:1;min-width:200px;}
+  .project-name{font-family:'Space Grotesk',sans-serif;font-size:21px;font-weight:700;}
+  .project-role{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-faint);margin-top:4px;}
+  .project-link{font-family:'Outfit',sans-serif;font-weight:600;font-size:12.5px;color:var(--violet);border:1px solid var(--border);padding:9px 16px;border-radius:100px;white-space:nowrap;}
+  .project-link:hover{border-color:var(--violet);background:var(--glass-strong);}
+  .project-body p{color:var(--text-dim);font-size:14.5px;margin-bottom:12px;}
+  .project-body ul{margin:14px 0;padding-left:0;list-style:none;}
+  .project-body li{color:var(--text-dim);font-size:14px;padding-left:18px;position:relative;margin-bottom:8px;}
+  .project-body li::before{content:"✦";position:absolute;left:0;color:var(--pink);font-size:11px;top:3px;}
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);background:var(--glass-strong);border:1px solid var(--border);padding:5px 12px;border-radius:20px;}
+  .media-slot{margin-top:20px;padding-top:20px;border-top:1px solid var(--border);}
+  .media-slot-label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-faint);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.06em;}
+  .twitter-tweet{margin:0 auto !important;max-width:340px !important;}
+  .media-slot .twitter-tweet-wrap{display:flex;justify-content:center;}
+  .watch-card{
+    display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:16px;
+    border:1px solid var(--border);background:var(--glass);transition:transform .2s ease, border-color .2s ease;
+  }
+  .watch-card:hover{transform:translateY(-3px);border-color:var(--violet);}
+  .watch-play{
+    width:50px;height:50px;border-radius:50%;flex-shrink:0;
+    background:linear-gradient(90deg,var(--violet),var(--pink));
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;
+  }
+  .watch-t1{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;}
+  .watch-t2{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-faint);margin-top:2px;}
+
+  .media-embed{border-radius:16px;overflow:hidden;border:1px solid var(--border);}
+  .media-embed video, .media-embed iframe{width:100%;display:block;border:none;}
+  .fb-wrap{aspect-ratio:16/9;}
+  .yt-wrap{aspect-ratio:16/9;}
+  .yt-wrap iframe, .fb-wrap iframe{width:100%;height:100%;}
+
+  .more-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:720px){.more-grid{grid-template-columns:1fr;}}
+  .more-card{background:var(--glass);border:1px solid var(--border);border-radius:18px;padding:20px;backdrop-filter:blur(10px);}
+  .more-card h4{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;margin-bottom:6px;}
+  .more-card .role{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--pink);margin-bottom:8px;}
+  .more-card p{font-size:13.5px;color:var(--text-dim);}
+
+  .timeline{border-left:2px solid var(--border);padding-left:28px;margin-left:6px;}
+  .tl-item{position:relative;padding-bottom:32px;}
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-item::before{content:"";position:absolute;left:-33px;top:4px;width:10px;height:10px;border-radius:50%;background:linear-gradient(90deg,var(--violet),var(--pink));}
+  .tl-date{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-faint);}
+  .tl-role{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;margin-top:4px;}
+  .tl-org{font-size:13.5px;color:var(--pink);margin-top:2px;}
+  .tl-desc{font-size:14px;color:var(--text-dim);margin-top:8px;max-width:600px;}
+
+  .skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;}
+  @media(max-width:720px){.skills-grid{grid-template-columns:1fr;}}
+  .skills-h{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px;}
+  .skill-list span{display:inline-block;font-size:13px;color:var(--text-dim);border:1px solid var(--border);background:var(--glass);padding:6px 12px;border-radius:100px;margin:0 6px 8px 0;}
+
+  .stack-grid{display:flex;flex-direction:column;align-items:center;gap:14px;margin-bottom:36px;}
+  .stack-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+  .stack-tile{
+    width:88px;height:88px;border-radius:18px;
+    background:var(--glass);border:1px solid var(--border);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+    position:relative;flex-shrink:0;
+    transition:transform .3s cubic-bezier(.2,.9,.3,1.3), border-color .25s ease, box-shadow .25s ease;
+    opacity:0;transform:translateY(16px) scale(0.9);
+  }
+  .stack-tile.show{opacity:1;transform:translateY(0) scale(1);}
+  .stack-tile:hover{transform:translateY(-7px) scale(1.06);border-color:var(--violet);box-shadow:0 16px 32px rgba(80,50,200,0.28);}
+  .stack-mark{
+    width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;color:#fff;
+  }
+  .stack-name{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--text-dim);text-align:center;line-height:1.2;padding:0 4px;}
+  .stack-tile::after{
+    content:attr(data-tip);position:absolute;top:-32px;left:50%;transform:translateX(-50%) scale(0.85);
+    background:var(--glass-strong);border:1px solid var(--border);padding:5px 11px;border-radius:8px;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text);white-space:nowrap;
+    opacity:0;pointer-events:none;transition:opacity .2s ease, transform .2s ease;backdrop-filter:blur(8px);
+  }
+  .stack-tile:hover::after{opacity:1;transform:translateX(-50%) scale(1);}
+  @media(max-width:640px){.stack-tile{width:72px;height:72px;} .stack-mark{width:30px;height:30px;font-size:9px;}}
+
+  .cred-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  @media(max-width:900px){.cred-grid{grid-template-columns:repeat(3,1fr);}}
+  @media(max-width:520px){.cred-grid{grid-template-columns:repeat(2,1fr);}}
+  .cred-tile{
+    aspect-ratio:1/1;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    border:1px solid var(--border);background:var(--glass);backdrop-filter:blur(10px);
+    transition:transform .3s cubic-bezier(.2,.9,.3,1.3), box-shadow .3s ease;padding:10px;text-align:center;
+  }
+  .cred-tile:hover{transform:translateY(-6px) scale(1.04);box-shadow:0 16px 34px rgba(80,50,200,0.22);}
+  .cred-mark{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;}
+  .cred-name{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.04em;}
+
+  footer{padding:60px 0 44px;border-top:1px solid var(--border);text-align:center;margin-top:20px;}
+  footer .display{font-size:24px;font-weight:700;}
+  footer p{color:var(--text-dim);font-size:14px;margin-top:10px;}
+  footer .foot-links{display:flex;justify-content:center;gap:24px;margin-top:24px;font-family:'IBM Plex Mono',monospace;font-size:13px;}
+  footer .foot-links a:hover{color:var(--violet);}
+  footer .copyright{margin-top:40px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-faint);}
+</style>
+</head>
+<body>
+
+<div id="cursorSquare"></div>
+<div id="cursorGlow"></div>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+<div class="blob blob-4"></div>
+
+<div class="nav-pill-wrap">
+  <div class="nav-pill">
+    <div class="nav-name">NORAH ALSHAREEF</div>
+    <div class="nav-links">
+      <a href="#flagship">Projects</a>
+      <a href="#more">More</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+      <div class="theme-toggle" id="themeToggle" title="Toggle light/dark">🌙</div>
+    </div>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Cambridge, MA · Riyadh, Saudi Arabia · System Architect</div>
+
+    <div class="profile-block">
+      <img class="profile-photo" src="assets/norah-photo-v2.png" alt="Norah Alshareef">
+      <div>
+        <div class="profile-name">NORAH<br>ALSHAREEF</div>
+        <div class="profile-role">SYSTEM ARCHITECT · NATIONAL IDENTITY INFRASTRUCTURE · AI &amp; DEEP TECH</div>
+        <div class="mini-logos">
+          <div class="mini-logo"><img src="assets/mit-logo.png" alt="MIT"></div>
+          <div class="mini-logo"><img src="assets/ksu-logo.png" alt="King Saud University"></div>
+          <div class="mini-logo"><img src="assets/sdaia-logo.png" alt="SDAIA"></div>
+          <div class="mini-logo"><img src="assets/pmp-logo.png" alt="PMP"></div>
+          <div class="mini-logo"><img src="assets/mawhiba-logo.png" alt="Mawhiba"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hadith-ar" dir="rtl" lang="ar">«إنَّ اللهَ يُحِبُّ إذا عَمِلَ أحَدُكُمْ عَمَلًا أنْ يُتْقِنَهُ»</div>
+    <p class="hadith-en">"Indeed, Allah loves that when one of you does a job, he perfects it." — the value everything below is built on.</p>
+    <p class="hero-sub">System architect and founding engineer behind Saudi Arabia's national PKI, digital signature platform, and identity infrastructure — serving 23.5M+ citizens. Now building Caracal, a face-verification API, while finishing an M.S. in System Design & Management at MIT.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#flagship">See the work →</a>
+      <a class="btn btn-ghost" href="mailto:i@nshareef.com">Get in touch</a>
+    </div>
+    <div class="hero-meta">
+      <a href="mailto:i@nshareef.com">i@nshareef.com</a>
+      <span>+966 55 900 0337</span>
+      <a href="https://noratech.blog" target="_blank">noratech.blog</a>
+      <a href="https://github.com/nora-alshareef" target="_blank">github.com/nora-alshareef</a>
+    </div>
+
+    <div class="mini-label" style="margin-top:56px;">// systems I've built</div>
+    <div class="orbit-wrap">
+      <div class="orbit orbit-a"></div>
+      <div class="orbit orbit-b"></div>
+    </div>
+
+    <div class="logo-grid">
+      <a class="logo-tile tile-nafath" href="#nafath"><img src="assets/nafath-logo.png" alt="Nafath"><div class="tile-label">Nafath</div></a>
+      <a class="logo-tile tile-ibram" href="#ibram"><img src="assets/ibram-logo-new.svg" alt="Ibram"><div class="tile-label">Ibram</div></a>
+      <a class="logo-tile tile-caracal" href="#caracal"><img src="assets/caracal-logo.png" alt="Caracal"><div class="tile-label">Caracal</div></a>
+      <a class="logo-tile tile-ssl video" href="#ssl"><span class="mark-text">SSL</span><div class="tile-label">Saudi SSL</div></a>
+      <a class="logo-tile tile-egates video" href="#egates"><span class="mark-text">E·G</span><div class="tile-label">E-Gates</div></a>
+      <a class="logo-tile tile-mofa" href="#mofa"><img src="https://play-lh.googleusercontent.com/BotMsiTKjjCIeo55TJittEq0OOX95f4dGBji4dgIgg67F0G_rwc0Vm9DROO2JT3XNr29-uXp0S0FoaL1yHuw8Oc=w480-h960" alt="MOFA app"><div class="tile-label">MOFA</div></a>
+    </div>
+  </div>
+</header>
+
+<div class="ledger">
+  <div class="wrap">
+    <div class="ledger-grid">
+      <div class="stat"><div class="stat-num">23.5M+</div><div class="stat-label mono">Nafath users</div></div>
+      <div class="stat"><div class="stat-num">3B+</div><div class="stat-label mono">Transactions</div></div>
+      <div class="stat"><div class="stat-num">300K+</div><div class="stat-label mono">Docs signed</div></div>
+      <div class="stat"><div class="stat-num">5,000+</div><div class="stat-label mono">Certs issued</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="marquee-outer">
+  <div class="marquee-track" id="marqueeTrack">
+    <div class="m-item"><span class="dot"></span>Python</div>
+    <div class="m-item"><span class="dot"></span>.NET Core / C#</div>
+    <div class="m-item"><span class="dot"></span>Java</div>
+    <div class="m-item"><span class="dot"></span>PKI &amp; Cryptography</div>
+    <div class="m-item"><span class="dot"></span>IAM / SSO</div>
+    <div class="m-item"><span class="dot"></span>Docker</div>
+    <div class="m-item"><span class="dot"></span>Kubernetes</div>
+    <div class="m-item"><span class="dot"></span>Ansible</div>
+    <div class="m-item"><span class="dot"></span>PostgreSQL</div>
+    <div class="m-item"><span class="dot"></span>Milvus</div>
+    <div class="m-item"><span class="dot"></span>HSM</div>
+    <div class="m-item"><span class="dot"></span>RedHat Linux</div>
+    <div class="m-item"><span class="dot"></span>DNS</div>
+    <!-- duplicated for seamless loop -->
+    <div class="m-item"><span class="dot"></span>Python</div>
+    <div class="m-item"><span class="dot"></span>.NET Core / C#</div>
+    <div class="m-item"><span class="dot"></span>Java</div>
+    <div class="m-item"><span class="dot"></span>PKI &amp; Cryptography</div>
+    <div class="m-item"><span class="dot"></span>IAM / SSO</div>
+    <div class="m-item"><span class="dot"></span>Docker</div>
+    <div class="m-item"><span class="dot"></span>Kubernetes</div>
+    <div class="m-item"><span class="dot"></span>Ansible</div>
+    <div class="m-item"><span class="dot"></span>PostgreSQL</div>
+    <div class="m-item"><span class="dot"></span>Milvus</div>
+    <div class="m-item"><span class="dot"></span>HSM</div>
+    <div class="m-item"><span class="dot"></span>RedHat Linux</div>
+    <div class="m-item"><span class="dot"></span>DNS</div>
+  </div>
+</div>
+
+<section id="flagship">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag mono">01 · Flagship Systems</div>
+      <div class="sec-title display">What I actually built, end to end</div>
+      <p class="sec-desc">Not "contributed to" — architected, coded, deployed, and in several cases, built the business case for, too.</p>
+    </div>
+
+    <div class="project" id="caracal">
+      <div class="project-head">
+        <div class="logo-badge tile-caracal"><img src="assets/caracal-logo.png" alt="Caracal logo"></div>
+        <div class="project-titles">
+          <div class="project-name display">Caracal</div>
+          <div class="project-role mono">Founder — caracal.solutions</div>
+        </div>
+        <a class="project-link" href="https://caracal.solutions/docs" target="_blank">View docs →</a>
+      </div>
+      <div class="project-body">
+        <p>Identity infrastructure for verification and liveness, built as a real developer-facing API. Two proprietary recognition models (Malma 1 for speed, Malma 2 for accuracy), a liveness engine that catches presentation attacks, and a self-hosted deployment path for customers who can't send biometric data to the cloud.</p>
+        <ul>
+          <li>Three completely separate auth schemes with zero fallback between them — API keys for machine-to-machine gallery ops, Supabase-backed JWTs for account management, a dedicated admin secret.</li>
+          <li><code>/verify</code> and <code>/liveness</code> ship unauthenticated and unrate-limited by design, so integration testing has zero friction before a customer commits.</li>
+          <li>Entitlement checks are never cached — every request re-verifies, fail-closed on any doubt.</li>
+          <li>Self-hosted deployments run identical model weights to the cloud API, license-gated rather than downgraded.</li>
+        </ul>
+        <div class="tags"><span class="tag">Biometrics</span><span class="tag">Face Recognition</span><span class="tag">Liveness</span><span class="tag">Self-Hosted</span><span class="tag">Supabase</span></div>
+      </div>
+    </div>
+
+    <div class="project" id="ibram">
+      <div class="project-head">
+        <div class="logo-badge tile-ibram"><img src="assets/ibram-logo-new.svg" alt="Ibram logo"></div>
+        <div class="project-titles">
+          <div class="project-name display">Ibram — National Digital Signature Platform</div>
+          <div class="project-role mono">Founder · Sole Architect · Lead Developer — SDAIA / NIC</div>
+        </div>
+        <a class="project-link" href="https://ibram.nic.gov.sa" target="_blank">ibram.nic.gov.sa →</a>
+      </div>
+      <div class="project-body">
+        <p>Saudi Arabia's national platform for legally-binding digital signatures. I built the signing engine myself, then hired and interviewed the team that scaled it. Business case, cryptography, infrastructure, and network — all mine to design.</p>
+        <ul>
+          <li>Built the core RSA/ECDSA signing engine, integrated directly against Saudi's PKI Signing CA — no third-party signing vendor.</li>
+          <li>Negotiated and commissioned the HSM contracts myself, then set up the HSMs and network path to them.</li>
+          <li>Now processes 5,000+ signing transactions a day and has signed 300,000+ documents in production.</li>
+          <li>Later extended the platform with a dedicated document-signing CA (TCA) — architected and set up personally.</li>
+        </ul>
+        <div class="tags"><span class="tag">.NET Core</span><span class="tag">RSA / ECDSA</span><span class="tag">HSM</span><span class="tag">PKI</span></div>
+        <div class="media-slot">
+          <div class="media-slot-label mono">// as it happened</div>
+          <blockquote class="twitter-tweet" data-theme="dark"><a href="https://x.com/SDAIA_SA/status/2086792362030661809"></a></blockquote>
+        </div>
+      </div>
+    </div>
+
+    <div class="project" id="nafath">
+      <div class="project-head">
+        <div class="logo-badge tile-nafath"><img src="assets/nafath-logo.png" alt="Nafath logo"></div>
+        <div class="project-titles">
+          <div class="project-name display">Nafath — National SSO & Digital Identity</div>
+          <div class="project-role mono">Founding Team · System Architect (started as Business Analyst) — SDAIA</div>
+        </div>
+        <a class="project-link" href="https://www.iam.gov.sa/authservice/userauthservice?lang=ar" target="_blank">iam.gov.sa →</a>
+      </div>
+      <div class="project-body">
+        <p>The authenticator app every citizen and resident in Saudi Arabia uses to log into government and private services. I joined at the ground floor as one of the founding team, first mapping the business requirements, then redesigning the network architecture as system architect.</p>
+        <ul>
+          <li>Redesigned network architecture enabling access to 6,000+ government and private services.</li>
+          <li>Engineered a sticky-session strategy and zero-downtime migration at tens-of-millions-of-citizens scale.</li>
+          <li>Ran early POCs across SAML, OAuth, OpenID, and OIDC to settle on the national SSO protocol stack.</li>
+          <li>Today: 23.5M+ users, 3B+ transactions.</li>
+        </ul>
+        <div class="tags"><span class="tag">SAML</span><span class="tag">OAuth2 / OIDC</span><span class="tag">Java</span><span class="tag">High Availability</span></div>
+        <div class="media-slot">
+          <div class="media-slot-label mono">// as it happened</div>
+          <blockquote class="twitter-tweet" data-theme="dark"><a href="https://x.com/SDAIA_SA/status/1783490958773952874"></a></blockquote>
+        </div>
+      </div>
+    </div>
+
+    <div class="project" id="ssl">
+      <div class="project-head">
+        <div class="logo-badge tile-ssl" style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#fff;">SSL</div>
+        <div class="project-titles">
+          <div class="project-name display">Saudi National PKI — Migration & Public SSL</div>
+          <div class="project-role mono">System Architect — SDAIA / NIC</div>
+        </div>
+        <a class="project-link" href="https://sdaia.gov.sa/en/Sectors/Nic/ca/Pages/default.aspx" target="_blank">SDAIA CA →</a>
+      </div>
+      <div class="project-body">
+        <p>Supervised the migration of Saudi Arabia's national PKI from NCDC to SDAIA's datacenter — understanding NCDC's existing infrastructure, the PKI itself, and the specific structure of the Saudi PKI hierarchy, then designing the new environment it would live in.</p>
+        <ul>
+          <li>Designed the system architecture for new datacenter zones — root room, server racks, network segmentation — and wrote the full migration plan.</li>
+          <li>Worked directly with WebTrust consultants throughout, since a mis-step could have cost the CA its browser-trust accreditation.</li>
+          <li>Designed the system architecture for Saudi's public SSL infrastructure at <a href="https://ssl.gov.sa" target="_blank" style="color:var(--violet);">ssl.gov.sa</a>.</li>
+          <li>Also built an internal certificate-management solution now issuing 5,000+ internal certificates for SDAIA's servers and firewalls.</li>
+        </ul>
+        <div class="tags"><span class="tag">X.509</span><span class="tag">Root CA</span><span class="tag">WebTrust</span><span class="tag">HSM</span></div>
+        <div class="media-slot">
+          <div class="media-slot-label mono">// presenting at the PKI event</div>
+          <blockquote class="twitter-tweet" data-theme="dark"><a href="https://x.com/SDAIA_SA/status/1733595434625520007"></a></blockquote>
+        </div>
+        <div class="media-slot">
+          <div class="media-slot-label mono">// ssl.gov.sa</div>
+          <a class="watch-card" href="https://ssl.gov.sa/assets/try1-DN8pBRns.mp4" target="_blank">
+            <div class="watch-play">▶</div>
+            <div>
+              <div class="watch-t1">Watch the SSL promo</div>
+              <div class="watch-t2">ssl.gov.sa · opens in a new tab</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project" id="egates">
+      <div class="project-head">
+        <div class="logo-badge tile-egates" style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#fff;">EG</div>
+        <div class="project-titles">
+          <div class="project-name display">NEOM Smart Traveller — Airport E-Gates</div>
+          <div class="project-role mono">Backend Lead — Fingerprint & Face Verification — SDAIA</div>
+        </div>
+      </div>
+      <div class="project-body">
+        <p>Led backend development and hiring for the biometric verification layer of the national e-gate system — the fingerprint and face-recognition matching that decides, in real time, whether a traveller passes through.</p>
+        <ul>
+          <li>Owned architecture from POC through production deployment.</li>
+          <li>Built and hired the backend team responsible for real-time biometric matching under airport-grade latency and uptime requirements.</li>
+          <li>Integrated identity verification with real-time data flows and high-availability infrastructure for a live smart-city travel system.</li>
+        </ul>
+        <div class="tags"><span class="tag">Biometrics</span><span class="tag">Fingerprint Matching</span><span class="tag">Face Recognition</span><span class="tag">Distributed Systems</span><span class="tag">Team Hiring</span></div>
+        <div class="media-slot">
+          <div class="media-slot-label mono">// Jawazat — smart gate launch</div>
+          <blockquote class="twitter-tweet" data-theme="dark"><a href="https://x.com/DACOKSA/status/1217807618162425856"></a></blockquote>
+        </div>
+        <div class="media-slot">
+          <div class="media-slot-label mono">// smart gate, in production</div>
+          <blockquote class="twitter-tweet" data-theme="dark"><a href="https://x.com/SDAIA_SA/status/1833441355931996201"></a></blockquote>
+        </div>
+        <div class="media-slot">
+          <div class="media-slot-label mono">// Jawazat — electronic gates</div>
+          <div class="media-embed fb-wrap">
+            <iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FAljawazatKSA%2Fvideos%2Felectronic-gates-are-self-service-to-facilitate-the-departure-of-the-guests-of-a%2F2080150269592950%2F&show_text=false" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project" id="faceportal">
+      <div class="project-head">
+        <div class="logo-badge tile-egates" style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#fff;">FP</div>
+        <div class="project-titles">
+          <div class="project-name display">FacePortal — National Face Recognition Engine</div>
+          <div class="project-role mono">Architect &amp; Lead Developer — SDAIA, National Biometrics</div>
+        </div>
+      </div>
+      <div class="project-body">
+        <p>The face-matching engine behind Saudi Arabia's national biometric identity infrastructure — the same recognition layer that underpins verification across government touchpoints, including the e-gates above.</p>
+        <ul>
+          <li>Benchmarked Luna, Innovatrics, and Luxand face-recognition SDKs before selecting a production path.</li>
+          <li>Designed a production-grade matching engine backed by Milvus vector DB for fast similarity search at national scale.</li>
+          <li>Achieved high availability for a biometric identity system serving government endpoints directly.</li>
+        </ul>
+        <div class="tags"><span class="tag">Biometrics</span><span class="tag">Face Recognition</span><span class="tag">Milvus Vector DB</span><span class="tag">Luxand SDK</span><span class="tag">C#</span><span class="tag">High Availability</span></div>
+      </div>
+    </div>
+
+    <div class="project" id="mofa">
+      <div class="project-head">
+        <div class="logo-badge tile-mofa"><img src="https://play-lh.googleusercontent.com/BotMsiTKjjCIeo55TJittEq0OOX95f4dGBji4dgIgg67F0G_rwc0Vm9DROO2JT3XNr29-uXp0S0FoaL1yHuw8Oc=w480-h960" alt="MOFA app icon"></div>
+        <div class="project-titles">
+          <div class="project-name display">MOFA Visa Applicant Biometric Checking</div>
+          <div class="project-role mono">Lead Developer — NIC, National Information Center</div>
+        </div>
+        <a class="project-link" href="https://play.google.com/store/apps/details?id=sa.gov.mofa.saudivisabio" target="_blank">Play Store →</a>
+      </div>
+      <div class="project-body">
+        <p>Led design and development of the Ministry of Foreign Affairs enrollment service — built the backend for both in-office biometric checking at MOFA counters and the mobile version applicants use directly, alongside the Unique-ID and AFIS (Automated Fingerprint Identification System) work.</p>
+        <div class="tags"><span class="tag">Biometrics</span><span class="tag">Java</span><span class="tag">AFIS</span><span class="tag">Mobile Backend</span><span class="tag">National Scale</span></div>
+        <div class="media-slot">
+          <div class="media-slot-label mono">// Saudi Visa Bio</div>
+          <a class="watch-card" href="https://www.youtube.com/watch?v=lrKKd1mF0b4" target="_blank">
+            <div class="watch-play">▶</div>
+            <div>
+              <div class="watch-t1">Watch the app demo</div>
+              <div class="watch-t2">YouTube · opens in a new tab</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="more">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag mono">02 · More Systems</div>
+      <div class="sec-title display">The rest of the infrastructure</div>
+      <p class="sec-desc">Smaller in scope, not in stakes — still running in production today.</p>
+    </div>
+    <div class="more-grid">
+      <div class="more-card">
+        <h4 class="display">National Data Center Migration</h4>
+        <div class="role mono">Zero-downtime, 5+ teams</div>
+        <p>Migrated 30 servers across sites with zero downtime and zero data loss — SQL AlwaysOn, MariaDB MaxScale, and Nomad clusters, coordinated across 5+ departments.</p>
+      </div>
+      <div class="more-card">
+        <h4 class="display">LDAP Load Balancing & Failover</h4>
+        <div class="role mono">National Identity Infrastructure</div>
+        <p>Built an intelligent LDAP proxy handling Nafath-based auth, full-protocol traffic redistribution, and automatic failover across primary servers.</p>
+      </div>
+      <div class="more-card">
+        <h4 class="display">High-Availability DNS</h4>
+        <div class="role mono">National DNS Layer</div>
+        <p>Implemented HA BIND DNS with master-slave architecture plus a full disaster-recovery solution for Saudi Arabia's government DNS layer.</p>
+      </div>
+      <div class="more-card">
+        <h4 class="display">Reusable .NET SDK Suite</h4>
+        <div class="role mono">Open Source · 6 Libraries</div>
+        <p>Found 54% code duplication across 15+ national services — open-sourced 6 production-hardened libraries now adopted across government deployments.</p>
+      </div>
+      <div class="more-card">
+        <h4 class="display">AAmen (آمن) — Contractor Management</h4>
+        <div class="role mono">.NET Core · Nafath SSO</div>
+        <p>Architected a national contractor vetting and physical-access platform with role-based access and security clearance workflows.</p>
+      </div>
+      <div class="more-card">
+        <h4 class="display">National IAM Desktop App</h4>
+        <div class="role mono">Airports · MOI · SDAIA</div>
+        <p>PKI-backed authentication desktop app deployed across three government entities with cross-entity interoperability.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ventures">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag mono">03 · Venture & Research</div>
+      <div class="sec-title display">MIT — applied AI and deep-tech</div>
+      <p class="sec-desc">Alongside my M.S. in System Design & Management.</p>
+    </div>
+    <div class="more-grid">
+      <div class="more-card">
+        <h4 class="display">LAWTech</h4>
+        <div class="role mono">Co-Founder & CTO</div>
+        <p>Citation-backed litigation-outcome prediction SaaS for Brazil's legal-tech market ($18M–$112M TAM). Led AI architecture for STJ/STF/CARF tax-case prediction — 81.3% gross margin, LTV/CoCA 3.9×.</p>
+      </div>
+      <div class="more-card">
+        <h4 class="display">Saudi Stock Market AI Advisor</h4>
+        <div class="role mono">Python · Streamlit · NLP</div>
+        <p>End-to-end AI advisory system: live price scrapers, NLP embeddings for semantic news search, and ML trading-signal generation.</p>
+      </div>
+      <div class="more-card">
+        <h4 class="display">Geometry Embeddings — Jet Engine Stress</h4>
+        <div class="role mono">MIT 2.156 · Published Poster</div>
+        <p>Applied self-supervised point-cloud learning (Point-MAE) to predict stress in jet engine brackets, replacing FEA with an ML surrogate — R² 0.83 on DeepJEB.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag mono">04 · Experience</div>
+      <div class="sec-title display">Career timeline</div>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-date mono">OCT 2022 — PRESENT</div>
+        <div class="tl-role display">System Architecture Dept. Manager</div>
+        <div class="tl-org">SDAIA · Riyadh</div>
+        <div class="tl-desc">Owns end-to-end architecture across biometrics, digital identity, PKI, and IAM for Airports, MOI, and SDAIA. Led CI/CD migration across GitHub Actions, Docker, Kubernetes, Nomad, and Ansible. Raised documented DR service coverage from 10% to 60%.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date mono">JAN 2021 — JAN 2022</div>
+        <div class="tl-role display">Backend Team Lead</div>
+        <div class="tl-org">SDAIA · Riyadh</div>
+        <div class="tl-desc">Led Digital Identity Services: signing/encryption, Ibram, PKIAdapter, HSM integration. Delivered the national SSO project. Managed a team of 8.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date mono">JAN 2018 — JAN 2020</div>
+        <div class="tl-role display">Senior Software Developer</div>
+        <div class="tl-org">NIC — National Information Center · Riyadh</div>
+        <div class="tl-desc">Led MOFA Enrollment Service. Built the Unique-ID service and led R&D on AFIS architecture.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date mono">JAN — AUG 2018</div>
+        <div class="tl-role display">Pre-Sales Engineer</div>
+        <div class="tl-org">Sure International Technology · Riyadh</div>
+        <div class="tl-desc">Bridged technical and commercial teams; ran enterprise requirements discovery.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date mono">SEP 2025 — DEC 2026</div>
+        <div class="tl-role display">M.S. System Design & Management</div>
+        <div class="tl-org">MIT · Cambridge, MA</div>
+        <div class="tl-desc">CTO-level roadmapping, deep-tech venture strategy, applied AI/ML.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag mono">05 · Skills, Certs, Education</div>
+      <div class="sec-title display">Toolkit</div>
+    </div>
+    <div class="mini-label">// tech stack</div>
+    <div class="stack-grid" id="stackGrid">
+      <div class="stack-row">
+        <div class="stack-tile" data-tip="Python"><div class="stack-mark" style="background:linear-gradient(135deg,#9B7BFF,#5B4CC4);">PY</div><div class="stack-name">Python</div></div>
+        <div class="stack-tile" data-tip="Java"><div class="stack-mark" style="background:linear-gradient(135deg,#F472B6,#9B5DE5);">JV</div><div class="stack-name">Java</div></div>
+        <div class="stack-tile" data-tip=".NET / C#"><div class="stack-mark" style="background:linear-gradient(135deg,#6C8CFF,#4C3AA6);">.NET</div><div class="stack-name">.NET / C#</div></div>
+        <div class="stack-tile" data-tip="PKI &amp; Cryptography"><div class="stack-mark" style="background:linear-gradient(135deg,#34B8AA,#164E48);">PKI</div><div class="stack-name">PKI / Crypto</div></div>
+        <div class="stack-tile" data-tip="System Architecture"><div class="stack-mark" style="background:linear-gradient(135deg,#9B7BFF,#F472B6);">SYS</div><div class="stack-name">Sys. Arch.</div></div>
+        <div class="stack-tile" data-tip="IAM &amp; SSO"><div class="stack-mark" style="background:linear-gradient(135deg,#5B4CC4,#2E1F7A);">IAM</div><div class="stack-name">IAM / SSO</div></div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-tile" data-tip="Docker"><div class="stack-mark" style="background:linear-gradient(135deg,#6C8CFF,#3A2E8C);">DKR</div><div class="stack-name">Docker</div></div>
+        <div class="stack-tile" data-tip="Kubernetes"><div class="stack-mark" style="background:linear-gradient(135deg,#9B7BFF,#4C3AA6);">K8S</div><div class="stack-name">Kubernetes</div></div>
+        <div class="stack-tile" data-tip="HSM"><div class="stack-mark" style="background:linear-gradient(135deg,#34B8AA,#1E6E68);">HSM</div><div class="stack-name">HSM</div></div>
+        <div class="stack-tile" data-tip="RedHat Linux"><div class="stack-mark" style="background:linear-gradient(135deg,#F472B6,#4C2A8C);">RHL</div><div class="stack-name">RedHat Linux</div></div>
+        <div class="stack-tile" data-tip="Ansible"><div class="stack-mark" style="background:linear-gradient(135deg,#9B5DE5,#2E1F7A);">ANS</div><div class="stack-name">Ansible</div></div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-tile" data-tip="PostgreSQL"><div class="stack-mark" style="background:linear-gradient(135deg,#6C8CFF,#5B4CC4);">PGS</div><div class="stack-name">PostgreSQL</div></div>
+        <div class="stack-tile" data-tip="LDAP"><div class="stack-mark" style="background:linear-gradient(135deg,#34B8AA,#2F9E96);">LDAP</div><div class="stack-name">LDAP</div></div>
+        <div class="stack-tile" data-tip="BIND DNS"><div class="stack-mark" style="background:linear-gradient(135deg,#9B7BFF,#6C8CFF);">DNS</div><div class="stack-name">BIND DNS</div></div>
+        <div class="stack-tile" data-tip="F5 Load Balancing"><div class="stack-mark" style="background:linear-gradient(135deg,#F472B6,#9B5DE5);">F5</div><div class="stack-name">F5</div></div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-tile" data-tip="NGINX"><div class="stack-mark" style="background:linear-gradient(135deg,#34B8AA,#164E48);">NGX</div><div class="stack-name">NGINX</div></div>
+        <div class="stack-tile" data-tip="Apache Load Balancer"><div class="stack-mark" style="background:linear-gradient(135deg,#9B5DE5,#4C2A8C);">APLB</div><div class="stack-name">Apache LB</div></div>
+        <div class="stack-tile" data-tip="Milvus Vector DB"><div class="stack-mark" style="background:linear-gradient(135deg,#6C8CFF,#4C3AA6);">MLV</div><div class="stack-name">Milvus</div></div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-tile" data-tip="GitHub Actions"><div class="stack-mark" style="background:linear-gradient(135deg,#9B7BFF,#F472B6);">GHA</div><div class="stack-name">GitHub Actions</div></div>
+        <div class="stack-tile" data-tip="Nomad"><div class="stack-mark" style="background:linear-gradient(135deg,#34B8AA,#5B4CC4);">NMD</div><div class="stack-name">Nomad</div></div>
+      </div>
+    </div>
+
+    <div class="skills-grid">
+      <div>
+        <div class="skills-h">Certifications</div>
+        <div class="skill-list">
+          <span>PMP</span><span>OCP Java SE 17</span><span>OCP Java SE 11</span><span>RHCSA</span>
+        </div>
+      </div>
+      <div>
+        <div class="skills-h">Education</div>
+        <div class="skill-list">
+          <span>MIT — M.S. SDM</span><span>King Saud University — B.Sc. IT, GPA 4.98/5.0</span><span>Mawhiba — Intl. Math Olympiad</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="credentials">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag mono">06 · Institutions</div>
+      <div class="sec-title display">Where it was built and backed</div>
+      <p class="sec-desc">Schools, employers, and certifying bodies behind the work above.</p>
+    </div>
+    <div class="cred-grid">
+      <div class="cred-tile" style="background:#fff;">
+        <img src="assets/mit-logo.png" alt="MIT" style="width:70%;object-fit:contain;">
+        <div class="cred-name" style="color:#333;">System Design &amp; Mgmt</div>
+      </div>
+      <div class="cred-tile" style="background:#fff;">
+        <img src="assets/ksu-logo.png" alt="King Saud University" style="width:72%;object-fit:contain;">
+        <div class="cred-name" style="color:#333;">King Saud University</div>
+      </div>
+      <div class="cred-tile" style="background:#fff;">
+        <img src="assets/mawhiba-logo.png" alt="Mawhiba" style="width:78%;object-fit:contain;">
+        <div class="cred-name" style="color:#333;">Mawhiba</div>
+      </div>
+      <div class="cred-tile" style="background:#fff;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/1/17/IMO_logo.svg" alt="International Math Olympiad" style="width:58%;object-fit:contain;">
+        <div class="cred-name" style="color:#333;">Intl. Math Olympiad</div>
+      </div>
+      <div class="cred-tile" style="background:#fff;">
+        <img src="assets/pmp-logo.png" alt="PMP" style="width:70%;object-fit:contain;">
+        <div class="cred-name" style="color:#333;">Project Mgmt Prof.</div>
+      </div>
+      <div class="cred-tile" style="background:#fff;">
+        <img src="assets/sdaia-logo.png" alt="SDAIA" style="width:74%;object-fit:contain;">
+        <div class="cred-name" style="color:#333;">Saudi Data &amp; AI Auth.</div>
+      </div>
+      <div class="cred-tile" style="background:#fff;">
+        <img src="https://upload.wikimedia.org/wikipedia/ar/a/a4/NIC_SA.svg" alt="NIC" style="width:70%;object-fit:contain;">
+        <div class="cred-name" style="color:#333;">Natl. Info. Center</div>
+      </div>
+      <div class="cred-tile" style="background:#fff;">
+        <img src="assets/sure-logo.png" alt="Sure International Technology" style="width:72%;object-fit:contain;">
+        <div class="cred-name" style="color:#333;">Intl. Technology</div>
+      </div>
+      <div class="cred-tile" style="background:#fff;">
+        <img src="https://miro.medium.com/v2/resize:fit:1104/1*meNIM7ngmoZwdzGXrtn-8g.png" alt="OCP Java SE 17" style="width:72%;object-fit:contain;">
+        <div class="cred-name" style="color:#333;">OCP Java SE 17</div>
+      </div>
+      <div class="cred-tile" style="background:#fff;">
+        <img src="https://images.credly.com/images/6f2a9ef8-4da2-4e67-bd52-84fbaa1af776/twitter_thumb_201604_02_Java-SE-11-Developer_Professional__1_.png" alt="OCP Java SE 11" style="width:72%;object-fit:contain;">
+        <div class="cred-name" style="color:#333;">OCP Java SE 11</div>
+      </div>
+      <div class="cred-tile" style="background:#fff;">
+        <img src="https://cdn.prod.website-files.com/601959b8cde20c101809c86a/66266aa37303c718a1e0f75b_Redhat-certified-badge.png" alt="RHCSA" style="width:72%;object-fit:contain;">
+        <div class="cred-name" style="color:#333;">RHCSA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="display">Let's build something that has to be trusted.</div>
+    <p>Cambridge, MA · Riyadh, Saudi Arabia · Open to CTO and founding-engineer roles in AI and deep-tech.</p>
+    <div class="foot-links">
+      <a href="mailto:i@nshareef.com">i@nshareef.com</a>
+      <a href="https://noratech.blog" target="_blank">noratech.blog</a>
+      <a href="https://github.com/nora-alshareef" target="_blank">GitHub</a>
+    </div>
+    <div class="copyright mono">© 2026 NORAH ALSHAREEF</div>
+  </div>
+</footer>
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script>
+  const toggle = document.getElementById('themeToggle');
+  const root = document.documentElement;
+  toggle.addEventListener('click', () => {
+    const isLight = root.getAttribute('data-theme') === 'light';
+    root.setAttribute('data-theme', isLight ? 'dark' : 'light');
+    toggle.textContent = isLight ? '🌙' : '☀️';
+  });
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => { if(e.isIntersecting){ e.target.style.transitionDelay = (i % 3) * 90 + 'ms'; e.target.classList.add('show'); obs.unobserve(e.target); } });
+  }, {threshold:0.12});
+  document.querySelectorAll('.project, .more-card, .stat, .tl-item, .cred-tile, .stack-tile').forEach(el => {
+    el.classList.add('reveal');
+    obs.observe(el);
+  });
+
+  // square cursor — tracks precisely, expands over interactive elements
+  const sq = document.getElementById('cursorSquare');
+  window.addEventListener('mousemove', (e) => {
+    if(sq) sq.style.transform = `translate(${e.clientX - 9}px, ${e.clientY - 9}px) rotate(${(e.clientX*0.05)%45}deg)`;
+  });
+  document.querySelectorAll('a, button, .btn, .theme-toggle, .logo-tile').forEach(el => {
+    el.addEventListener('mouseenter', () => sq && sq.classList.add('hover'));
+    el.addEventListener('mouseleave', () => sq && sq.classList.remove('hover'));
+  });
+
+  // cursor glow — follows pointer with a soft spring lag
+  const glow = document.getElementById('cursorGlow');
+  let gx = window.innerWidth/2, gy = window.innerHeight/2, tx = gx, ty = gy;
+  window.addEventListener('mousemove', (e) => { tx = e.clientX; ty = e.clientY; });
+  (function loop(){
+    gx += (tx - gx) * 0.08; gy += (ty - gy) * 0.08;
+    if(glow) glow.style.transform = `translate(${gx - 210}px, ${gy - 210}px)`;
+    requestAnimationFrame(loop);
+  })();
+
+  // magnetic buttons
+  document.querySelectorAll('.btn').forEach(el => {
+    el.addEventListener('mousemove', (e) => {
+      const r = el.getBoundingClientRect();
+      const mx = e.clientX - r.left - r.width/2;
+      const my = e.clientY - r.top - r.height/2;
+      el.style.transform = `translate(${mx*0.12}px, ${my*0.12}px)`;
+    });
+    el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+  });
+</script>
+</body>
+</html>
